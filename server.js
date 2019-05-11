@@ -1,9 +1,9 @@
 process.title = 'api-gateway'
 
-var express = require('express')
-var app = express()
-var router = require('./src/routers/router')
-var bodyParser = require('body-parser')
+const express = require('express')
+const app = express()
+const router = require('./src/routers/router')
+const bodyParser = require('body-parser')
 
 const HOST = process.env.API_HOST || 'localhost'
 const PORT = process.env.API_PORT || 8080
