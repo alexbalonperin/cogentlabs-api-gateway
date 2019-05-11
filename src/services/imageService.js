@@ -1,42 +1,34 @@
 const express = require('express')
-const fileUpload = require('express-fileupload')
+const request = require('request')
+const multer = require('multer')
+const streamBuffers = require('stream-buffers')
+
+const storage = multer.memoryStorage()
+const upload = multer({ storage: storage })
 
 const router = express.Router()
-const apiAdapter = require('../routers/apiAdapter')
 
 const HOST = process.env.IMAGE_SERVICE_HOST || 'localhost'
 const PORT = process.env.IMAGE_SERVICE_PORT || 8000
 const BASE_URL = `http://${HOST}:${PORT}`
-const api = apiAdapter(BASE_URL)
-
-router.use(
-  fileUpload({
-    limits: { fileSize: 50 * 1024 * 1024 }
-  })
-)
 
 router.get('/images/:id', (req, res) => {
-  api
-    .get(req.path)
-    .then(resp => {
-      res.send(resp.data)
-    })
-    .catch(r => {
-      console.log('ERROR')
-      console.log(r)
-    })
+  res.send('OK')
 })
 
-router.post('/images', (req, res) => {
-  api
-    .post(req.path, req.body)
-    .then(resp => {
-      res.send(resp.data)
+router.post('/images', upload.single('img_avatar'), (req, res) => {
+  var readableStreamBuffer = new streamBuffers.ReadableStreamBuffer({
+    frequency: 1, // in milliseconds.
+    chunkSize: 1024 // in bytes.
+  })
+  readableStreamBuffer.put(req.file.buffer)
+  readableStreamBuffer.stop()
+
+  readableStreamBuffer.pipe(
+    request.post(BASE_URL + req.path).on('response', () => {
+      res.send('FILE UPLOADED')
     })
-    .catch(r => {
-      console.log('ERROR')
-      console.log(r)
-    })
+  )
 })
 
 module.exports = router
