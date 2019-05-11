@@ -30,16 +30,7 @@
     "stop": "pkill -f api-gateway &2> /dev/null",
     "dev": "npm stop & rm -rf localhost & npm start",
     "clean": "standard --fix & npm run prettierjs & npm run eslintfix",
-    "pre-commit-clean": "pre-commit-clean"
+    "git-add": "git add -u"
   },
-  "pre-commit-clean": {
-    "*.js": [
-      "clean",
-      "git add",
-      "eslint --max-warnings 0"
-    ]
-  },
-  "pre-commit": [
-    "pre-commit-clean"
-  ]
+  "pre-commit": ["clean", "git-add"]
 }

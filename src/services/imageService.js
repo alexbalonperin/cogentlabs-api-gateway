@@ -3,7 +3,9 @@ const express = require('express')
 const router = express.Router()
 const apiAdapter = require('../routers/apiAdapter')
 
-const BASE_URL = 'http://localhost:8000'
+const HOST = process.env.IMAGE_SERVICE_HOST || 'localhost'
+const PORT = process.env.IMAGE_SERVICE_PORT || 8000
+const BASE_URL = `http://${HOST}:${PORT}`
 const api = apiAdapter(BASE_URL)
 
 router.get('/images/:id', (req, res) => {
