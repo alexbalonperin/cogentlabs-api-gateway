@@ -25,8 +25,10 @@ router.post('/images', upload.single('img_avatar'), (req, res) => {
   readableStreamBuffer.stop()
 
   readableStreamBuffer.pipe(
-    request.post(BASE_URL + req.path).on('response', () => {
-      res.send('FILE UPLOADED')
+    request.post(BASE_URL + req.path).on('response', (resp) => {
+      resp.on('data', (data) => {
+        res.send(data)
+      })
     })
   )
 })
