@@ -12,8 +12,12 @@ const HOST = process.env.IMAGE_SERVICE_HOST || 'localhost'
 const PORT = process.env.IMAGE_SERVICE_PORT || 8000
 const BASE_URL = `http://${HOST}:${PORT}`
 
-router.get('/images/:id', (req, res) => {
-  res.send('OK')
+router.get('/images/:id/thumbnail', (req, res) => {
+  request.get(BASE_URL + req.path).on('response', resp => {
+    resp.on('data', data => {
+      res.send(data)
+    })
+  })
 })
 
 router.post('/images', upload.single('img_avatar'), (req, res) => {
@@ -25,10 +29,10 @@ router.post('/images', upload.single('img_avatar'), (req, res) => {
   readableStreamBuffer.stop()
 
   readableStreamBuffer.pipe(
-    request.post(BASE_URL + req.path).on('response', (resp) => {
-      resp.on('data', (data) => {
+    request.post(BASE_URL + req.path).on('response', resp => {
+      resp.on('data', data => {
         var response = JSON.parse(data)
-        res.send(JSON.stringify({id: response.id}))
+        res.send(JSON.stringify({ id: response.id }))
       })
     })
   )
