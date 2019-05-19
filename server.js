@@ -17,6 +17,4 @@ app.get('/', (req, res) => {
 
 app.use(router)
 
-console.log(`Simple API Gateway run on ${HOST}:${PORT}`)
-
-app.listen(PORT, HOST)
+app.listen(PORT, HOST, () => console.log(`Simple API Gateway run on ${HOST}:${PORT}`))
