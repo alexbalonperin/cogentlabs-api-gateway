@@ -4,16 +4,12 @@ module.exports = {
     next(err)
   },
 
-  clientErrorHandler: (err, req, res, next) => {
-    if (req.xhr) {
-      res.status(500).send({ error: 'Something failed!' })
-    } else {
-      next(err)
-    }
+  notFound: (req, res) => {
+    res.status(404).send("Sorry can't find that!")
   },
 
   errorHandler: (err, req, res) => {
     res.status(500)
-    res.render('error', { error: err })
+    res.json({ error: 'Something went wrong' })
   }
 }

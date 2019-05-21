@@ -9,6 +9,6 @@ const router = express.Router()
 
 router.get('/images/:id/thumbnail', endpoints.thumbnail)
 
-router.post('/images', upload.single('img_avatar'), endpoints.upload)
+router.post('/images', upload.single('img'), endpoints.upload)
 
 module.exports = router
