@@ -9,7 +9,10 @@ module.exports = {
   },
 
   errorHandler: (err, req, res) => {
-    res.status(500)
-    res.json({ error: 'Something went wrong' })
+    if (err.message === 'Bad Request') {
+      res.status(400).json({ error: err })
+    } else {
+      res.status(500).json({ error: 'Something went wrong' })
+    }
   }
 }

@@ -16,8 +16,8 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(morgan('common'))
 app.use(methodOverride())
 
-app.get('/', (req, res) => {
-  res.send('Simple API Gateway')
+app.get('/healthz', (req, res) => {
+  res.send('OK')
 })
 
 app.use(router)
