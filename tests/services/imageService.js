@@ -1,3 +1,4 @@
+const nock = require('nock')
 const request = require('supertest')
 
 const server = require('../../server')
@@ -10,6 +11,13 @@ describe('GET /', () => {
       .expect(200)
   })
 })
+
+const HOST = process.env.IMAGE_SERVICE_HOST || 'localhost'
+const PORT = process.env.IMAGE_SERVICE_PORT || 8000
+const BASE_URL = `http://${HOST}:${PORT}`
+nock(BASE_URL)
+  .get('/images')
+  .reply(200, { 'id': 123 })
 
 describe('POST /images', () => {
   it('Accept uploaded images', () => {
