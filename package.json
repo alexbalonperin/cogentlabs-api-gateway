@@ -5,6 +5,9 @@
   "author": "Alexandre Balon-Perin<abalonperin1@gmail.com>",
   "main": "server.js",
   "license": "UNLICENSED",
+  "standard": {
+    "env": [ "mocha" ]
+  },
   "dependencies": {
     "express": "^4.16.4",
     "axios": "^0.18.0",
