@@ -17,7 +17,7 @@ describe('GET /healthz', () => {
 })
 
 describe('POST /images', () => {
-  it('Accept uploaded images', () => {
+  it('Accept small uploaded images', () => {
     const expected = 123
 
     nock(IMAGE_SERVICE_BASE_URL)
@@ -26,7 +26,7 @@ describe('POST /images', () => {
 
     request(app)
       .post('/images')
-      .attach('img', 'tests/fixtures/niijima.jpg')
+      .attach('img', 'tests/fixtures/small.jpg')
       .expect(200)
       .end(function (err, res) {
         if (err) throw err
@@ -34,10 +34,47 @@ describe('POST /images', () => {
       })
   })
 
+  it('Accept large uploaded images', () => {
+    const expected = 123
+
+    nock(IMAGE_SERVICE_BASE_URL)
+      .get('/images')
+      .reply(200, { 'id': expected })
+
+    request(app)
+      .post('/images')
+      .attach('img', 'tests/fixtures/large.jpg')
+      .expect(200)
+      .end(function (err, res) {
+        if (err) throw err
+        expect(res.id).to.be.equal(expected)
+      })
+  })
+
+  it('Accept uploaded images with different formats (png, gif, jpg)', () => {
+    const expected = 123
+    files = ['small.jpg', 'test.gif', 'test.png']
+
+    nock(IMAGE_SERVICE_BASE_URL)
+      .get('/images')
+      .reply(200, { 'id': expected })
+
+    for (var i = 0; i < files.length; i++) {
+      request(app)
+        .post('/images')
+        .attach('img', 'tests/fixtures/' + files[i])
+        .expect(200)
+        .end(function (err, res) {
+          if (err) throw err
+          expect(res.id).to.be.equal(expected)
+        })
+    }
+  })
+
   it('Fail when image service is unavailable', () => {
     request(app)
       .post('/images')
-      .attach('img', 'tests/fixtures/niijima.jpg')
+      .attach('img', 'tests/fixtures/small.jpg')
       .expect(500)
       .end(function (err, res) {
         if (err) throw err
